@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -5,8 +7,25 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:moencak_apps/navbar.dart';
 import 'package:moencak_apps/pages/homepage.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class SignUpPage extends StatefulWidget {
+  final Function() onClickedSignIn;
+  const SignUpPage({Key? key, required this.onClickedSignIn}) : super(key: key);
+
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +61,7 @@ class LoginPage extends StatelessWidget {
                         Container(
                           height: 12,
                         ),
-                        Text('Please enter your account',
+                        Text('Silakan Sign Up',
                             style:
                                 TextStyle(fontSize: 14, color: Colors.black54))
                       ],
@@ -53,6 +72,7 @@ class LoginPage extends StatelessWidget {
                     child: Column(
                       children: <Widget>[
                         TextField(
+                          controller: emailController,
                           obscureText: false,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -63,17 +83,11 @@ class LoginPage extends StatelessWidget {
                           height: 22.0,
                         ),
                         TextField(
+                          controller: passwordController,
                           obscureText: true,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: 'Password',
-                          ),
-                        ),
-                        TextField(
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Konfirmasi Password',
                           ),
                         ),
                       ],
@@ -101,29 +115,32 @@ class LoginPage extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                               primary: Color(0xFF968264),
                               minimumSize: const Size.fromHeight(50)),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => NavBar()));
-                          },
+                          onPressed: signUp,
                           child: const Text(
-                            'Login',
+                            'Sign Up',
                             style: TextStyle(fontSize: 14),
                           ),
                         ),
                         SizedBox(
                           height: 8,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('Belum Punya Akun? Silakan '),
-                            Text(
-                              'Sign Up',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )
-                          ],
+                        RichText(
+                          text: TextSpan(
+                            text: 'Sudah Punya Akun? Silakan',
+                            style: TextStyle(color: Colors.black),
+                            children: [
+                              TextSpan(
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = widget.onClickedSignIn,
+                                text: ' Login',
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF20774D),
+                                ),
+                              )
+                            ],
+                          ),
                         )
                       ],
                     ),
@@ -135,5 +152,15 @@ class LoginPage extends StatelessWidget {
         },
       ),
     );
+  }
+  Future signUp() async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+    } catch (e) {
+      debugPrint('Email or Password Incorrect');
+    }
   }
 }

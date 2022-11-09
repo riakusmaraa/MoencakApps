@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -7,7 +8,9 @@ import 'package:moencak_apps/navbar.dart';
 import 'package:moencak_apps/pages/homepage.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final VoidCallback onClickedSignUp;
+
+  const LoginPage({Key? key, required this.onClickedSignUp}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -124,15 +127,23 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(
                           height: 8,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('Belum Punya Akun? Silakan '),
-                            Text(
-                              'Sign Up',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )
-                          ],
+                        RichText(
+                          text: TextSpan(
+                            text: 'Belum Punya Akun? Silakan',
+                            style: TextStyle(color: Colors.black),
+                            children: [
+                              TextSpan(
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = widget.onClickedSignUp,
+                                text: ' Sign Up',
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF20774D),
+                                ),
+                              )
+                            ],
+                          ),
                         )
                       ],
                     ),
@@ -157,5 +168,3 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 }
-
-

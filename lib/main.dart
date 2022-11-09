@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:moencak_apps/auth_page.dart';
 import 'package:moencak_apps/firebase_options.dart';
 import 'package:moencak_apps/navbar.dart';
 import 'package:moencak_apps/pages/getStarted.dart';
@@ -43,7 +44,7 @@ class SignIn extends StatelessWidget {
         if(snapshot.hasData){
           return NavBar();
         }else{
-          return LoginPage();
+          return AuthPage();
         }
       }
       )

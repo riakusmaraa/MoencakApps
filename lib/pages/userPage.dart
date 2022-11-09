@@ -9,14 +9,31 @@ class UserPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    final user = FirebaseAuth.instance.currentUser!;
+    return Container(
+      margin:EdgeInsets.only(right: 32, left: 32),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text('Log Out'),
+          Text(
+            'Sign In as',
+            style: TextStyle(fontSize: 14),
+          ),
+          Text(
+            user.email!,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24
+            ),
+          ),
+          SizedBox(height: 16,),
           ElevatedButton(
-            onPressed:() => FirebaseAuth.instance.signOut(), child: Text('Log Out'),
-              )        ],
+            onPressed:() => FirebaseAuth.instance.signOut(), 
+            child: Text('Log Out'),
+            style: ElevatedButton.styleFrom(
+                primary: Color(0xFF20774D),
+                minimumSize: const Size.fromHeight(50)),
+          )        ],
       ),
     );
   }

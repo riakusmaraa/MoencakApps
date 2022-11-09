@@ -9,24 +9,8 @@ class OrderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Container(
-              margin: EdgeInsets.all(24),
-              child: Column(
-                children: [
-                  CardList(),
-            CardList(),
-            CardList(),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+    return Center(
+      child: Text('Order Page'),
     );
   }
 }
